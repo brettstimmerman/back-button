@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Back Button Utility: Simple Example</title>
+</head>
+<body>
+  <a href="../test">back-button test</a>
+  <input type="text" id="bb-data" style="display:none">
+  
+  <script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+  <script src="../src/back-button.js"></script>
+  <script>
+  YUI().use('gallery-back-button', function (Y) {
+      var BB = new Y.BackButton({storageNode: '#bb-data'});
+      
+      BB.add('foo', 'bar');
+      
+      BB.on('return', function (e) {
+        alert(e.data.foo);  // => 'bar'
+      });
+  });
+  </script>
+</body>
+</html>

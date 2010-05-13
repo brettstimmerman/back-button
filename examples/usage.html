@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Back Button Utility: Usage Example</title>
+</head>
+<body>
+  <input type="text" id="#bb-data" style="display:none">
+  
+  <script src="http://yui.yahooapis.com/3.1.1/build/yui/yui-min.js"></script>
+  <script src="../src/back-button.js"></script>
+  <script>
+  YUI().use('gallery-back-button', function (Y) {
+    
+    // Create a new BackButton instance bound to a hidden text input
+    var BB = new Y.BackButton({storageNode: '#bb-data'});
+    
+    // To store data, pass a key and a value to add(). The key must be a string,
+    // but the value can be any JSON serializable object.
+    BB.add('foo', 32);
+    
+    BB.add('bar', {baz: 'qux'});
+    
+    // add() can optionally accept a single object argument. The keys from this
+    // object will be merged with any existing keys.
+    BB.add({quux:'quuux'});
+    
+    // To retrieve stored data, pass the key to get().
+    BB.get('foo');  // => 32
+    
+    // If no key is specified, get() will return all stored data as an object.
+    BB.get();  // => {foo: 32, bar: {baz:'qux'}, quux: 'quuux'}}
+    
+    // To clear all stored data, call clear().
+    BB.clear();
+    
+    // If a key does not exist, get() will return undefined.
+    BB.get('foo');  // => undefined
+    
+    // If no data is stored and no key is specified, get() will return an empty 
+    // object.
+    BB.get();  // => {}
+    
+    // To be notified when a page with stored data is returned to, subscribe
+    // to the 'return' event. New subscribers added after the 'return' event has
+    // fired will run immediately.
+    BB.on('return', function (e) {
+      // Stored data detected on the page is available via the data property of
+      // the event facade.
+      var storedData = e.data;  // => {foo: 32, bar: {baz: 'qux'}}
+      
+      // Note that calls to get() inside a return handler operate against the
+      // current data store, which is emptied after 'return' fires.
+      BB.get('foo');  // => undefined
+      
+      // However, you can use add() to store new data.
+      BB.add('foo', 'bar');
+      
+      // Newly stored data can then be retrieved with get().
+      BB.get('foo');  // => 'bar'
+    });
+    
+  });
+  </script>
+</body>
+</html>
+  
